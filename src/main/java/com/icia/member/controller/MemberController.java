@@ -56,8 +56,8 @@ public class MemberController {
             MemberDTO dto = memberService.findByEmail(memberDTO.getMemberEmail());
             if(dto.getMemberEmail().equals(memberDTO.getMemberEmail())
                     && dto.getMemberPassword().equals(memberDTO.getMemberPassword())){
-                session.setAttribute("memberEmail", dto.getMemberEmail());
-                session.setAttribute("id", dto.getId());
+                session.setAttribute("loginEmail", dto.getMemberEmail());
+                session.setAttribute("loginId", dto.getId());
                 return new ResponseEntity(HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.CONFLICT);
