@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+<form name="member" action="/member/login" method="post">
+    <input type="text" name="memberEmail" placeholder="이메일"> <br>
+    <input type="password" name="memberPassword" placeholder="비밀번호"> <br>
+    <div id="login-area"></div>
+    <button>로그인</button>
+    <button type="button" onclick="cancel_fn()">취소</button>
+</form>
+</body>
+<script>
+    document.member.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const memberEmail = document.member.memberEmail.value;
+        const memberPassword = document.member.memberPassword.value;
+        $.ajax({
+            type:"post",
+            url:"/member/login",
+            data:{memberEmail: memberEmail,
+                memberPassword: memberPassword},
+            success : function () {
+                location.href = "/member";
+            }, error : function () {
+                const loginArea = document.querySelector("#login-area");
+                loginArea.innerHTML = "아이디또는 비밀번호가 틀렸습니다.";
+                loginArea.style.color = "red";
+            }
+        })
+    })
+
+    const cancel_fn = () => {
+        location.href = "/";
+    }
+</script>
+</html>

@@ -34,4 +34,9 @@ public class MemberService {
         MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
         return MemberDTO.toMemberDTO(memberEntity);
     }
+
+    public MemberDTO findByEmail(String memberEmail) {
+        MemberEntity memberEntity = memberRepository.findByMemberEmail(memberEmail).orElseThrow(() -> new NoSuchElementException());
+        return MemberDTO.toMemberDTO(memberEntity);
+    }
 }

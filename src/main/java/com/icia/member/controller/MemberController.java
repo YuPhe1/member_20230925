@@ -3,12 +3,16 @@ package com.icia.member.controller;
 import com.icia.member.dto.MemberDTO;
 import com.icia.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +28,7 @@ public class MemberController {
     @PostMapping("/member/save")
     public String save(@ModelAttribute MemberDTO memberDTO){
         memberService.save(memberDTO);
-        return "redirect:/";
+        return "redirect:/member/login";
     }
 
     @GetMapping("/members")
@@ -35,7 +39,44 @@ public class MemberController {
 
     @GetMapping("/member/{id}")
     public String detail(@PathVariable("id") Long id, Model model){
-        model.addAttribute("member", memberService.findById(id));
-        return "memberPages/memberDetail";
+        try {
+            model.addAttribute("member", memberService.findById(id));
+            return "memberPages/memberDetail";
+        } catch (Exception e){
+            return "memberPages/memberNotFound";
+        }
+    }
+
+    @GetMapping("/member/login")
+    public String loginPage(){
+        return "memberPages/memberLogin";
+    }
+
+    @PostMapping("/member/login")
+    public ResponseEntity login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
+        try {
+            MemberDTO dto = memberService.findByEmail(memberDTO.getMemberEmail());
+            if(dto.getMemberEmail().equals(memberDTO.getMemberEmail())
+                    && dto.getMemberPassword().equals(memberDTO.getMemberPassword())){
+                session.setAttribute("memberEmail", dto.getMemberEmail());
+                session.setAttribute("id", dto.getId());
+                return new ResponseEntity(HttpStatus.OK);
+            } else {
+                return new ResponseEntity(HttpStatus.CONFLICT);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/member")
+    public String member(){
+        return "memberPages/memberMain";
+    }
+
+    @GetMapping("/member/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/";
     }
 }
