@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
-    <title>회원목록</title>
+    <title>회원조회</title>
 </head>
 <body>
 <table>
@@ -13,11 +13,9 @@
         <th>생년월일</th>
         <th>전화번호</th>
     </tr>
-    <tr th:each="member: ${memberList}">
+    <tr>
         <td th:text="${member.id}"></td>
-        <td>
-            <a th:href="@{|/member/${member.id}|}" th:text="${member.memberEmail}"></a>
-        </td>
+        <td th:text="${member.memberEmail}"></td>
         <td th:text="${member.memberName}"></td>
         <td th:text="${member.memberBirth}"></td>
         <td th:text="${member.memberMobile}"></td>

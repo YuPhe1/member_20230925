@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -30,5 +31,11 @@ public class MemberController {
     public String findAll(Model model){
         model.addAttribute("memberList", memberService.findAll());
         return "memberPages/memberList";
+    }
+
+    @GetMapping("/member/{id}")
+    public String detail(@PathVariable("id") Long id, Model model){
+        model.addAttribute("member", memberService.findById(id));
+        return "memberPages/memberDetail";
     }
 }

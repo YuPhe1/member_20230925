@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +28,10 @@ public class MemberService {
             memberDTOList.add(MemberDTO.toMemberDTO(memberEntity));
         }
         return memberDTOList;
+    }
+
+    public MemberDTO findById(Long id) {
+        MemberEntity memberEntity = memberRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return MemberDTO.toMemberDTO(memberEntity);
     }
 }
