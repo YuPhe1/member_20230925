@@ -4,6 +4,7 @@ import com.icia.member.dto.MemberDTO;
 import com.icia.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,5 +24,11 @@ public class MemberController {
     public String save(@ModelAttribute MemberDTO memberDTO){
         memberService.save(memberDTO);
         return "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String findAll(Model model){
+        model.addAttribute("memberList", memberService.findAll());
+        return "memberPages/memberList";
     }
 }
