@@ -7,12 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequiredArgsConstructor
@@ -64,7 +62,7 @@ public class MemberController {
             } else {
                 return new ResponseEntity(HttpStatus.CONFLICT);
             }
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
@@ -78,5 +76,16 @@ public class MemberController {
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/";
+    }
+
+    @GetMapping("/member/dup-check")
+    public ResponseEntity dupCheck(@RequestParam("memberEmail") String memberEmail) {
+        System.out.println("memberEmail = " + memberEmail);
+        try {
+            MemberDTO dto = memberService.findByEmail(memberEmail);
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        } catch (NoSuchElementException e){
+            return new ResponseEntity(HttpStatus.OK);
+        }
     }
 }

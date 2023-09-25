@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
-<form action="/member/save" method="post">
-    <input type="text" name="memberEmail" placeholder="이메일"> <br>
+<form name="member" action="/member/save" method="post">
+    <input type="text" name="memberEmail" placeholder="이메일" onkeyup="check_false()">
+    <button type="button" onclick="check_email()">중복체크</button>
+    <br>
+    <div id="check-email-area"></div>
     <input type="password" name="memberPassword" placeholder="비밀번호"> <br>
     <input type="text" name="memberName" placeholder="이름"> <br>
     <input type="date" name="memberBirth"> <br>
@@ -16,6 +20,52 @@
 </form>
 </body>
 <script>
+    let checkEmail = false;
+    const checkEmailArea = document.querySelector("#check-email-area");
+    const check_false = () => {
+        checkEmail = false;
+        checkEmailArea.innerHTML = "";
+    }
+
+    const check_email = () => {
+        const email = document.member.memberEmail.value;
+        if (email == "") {
+            checkEmailArea.innerHTML = "이메일을 입력해 주세요.";
+            checkEmailArea.style.color = "red";
+        } else {
+            $.ajax({
+                type: "get",
+                url: "/member/dup-check",
+                data: {memberEmail: email},
+                success: function () {
+                    checkEmailArea.innerHTML = "사용가능한 이메일입니다.";
+                    checkEmailArea.style.color = "green";
+                    checkEmail = true;
+                }, error: function () {
+                    checkEmailArea.innerHTML = "이미사용중인 이메일 입니다.";
+                    checkEmailArea.style.color = "red";
+                }
+            })
+        }
+    }
+
+    document.member.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const password = document.member.memberPassword;
+        const name = document.member.memberName;
+        if(!checkEmail){
+            alert("이메일 중복체크를 해주세요!");
+            document.member.memberEmail.focus();
+        } else if (password.value == "") {
+            alert("비밀번호를 입력해 주세요!");
+            password.focus();
+        } else if (name.value == "") {
+            alert("이름을 입력해주세요!");
+            name.focus();
+        } else {
+            document.member.submit();
+        }
+    })
     const cancel_fn = () => {
         location.href = "/";
     }
