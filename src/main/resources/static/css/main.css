@@ -29,6 +29,8 @@
 
 #login-area {
     display: flex;
+    margin-left: auto;
+    margin-right: 30px;
 }
 
 #login-area a {
