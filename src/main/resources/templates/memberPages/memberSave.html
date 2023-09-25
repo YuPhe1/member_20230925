@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>회원가입</title>
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <th:block th:replace="~{component/config :: config}"></th:block>
 </head>
 <body>
-<form name="member" action="/member/save" method="post">
-    <input type="text" name="memberEmail" placeholder="이메일" onkeyup="check_false()">
-    <button type="button" onclick="check_email()">중복체크</button>
-    <br>
-    <div id="check-email-area"></div>
-    <input type="password" name="memberPassword" placeholder="비밀번호"> <br>
-    <input type="text" name="memberName" placeholder="이름"> <br>
-    <input type="date" name="memberBirth"> <br>
-    <input type="text" name="memberMobile" placeholder="전화번호"> <br>
-    <button>회원가입</button>
-    <button type="button" onclick="cancel_fn()">취소</button>
-</form>
+<div th:replace="~{component/header :: header}"></div>
+<div th:replace="~{component/nav :: nav}"></div>
+<div class="container">
+    <form name="member" action="/member/save" method="post">
+        <input type="text" name="memberEmail" placeholder="이메일" onkeyup="check_false()">
+        <button type="button" onclick="check_email()">중복체크</button>
+        <br>
+        <div id="check-email-area"></div>
+        <input type="password" name="memberPassword" placeholder="비밀번호"> <br>
+        <input type="text" name="memberName" placeholder="이름"> <br>
+        <input type="date" name="memberBirth"> <br>
+        <input type="text" name="memberMobile" placeholder="전화번호"> <br>
+        <button>회원가입</button>
+        <button type="button" onclick="cancel_fn()">취소</button>
+    </form>
+</div>
+<div th:replace="~{component/footer :: footer}"></div>
 </body>
 <script>
     let checkEmail = false;
@@ -53,7 +56,7 @@
         e.preventDefault();
         const password = document.member.memberPassword;
         const name = document.member.memberName;
-        if(!checkEmail){
+        if (!checkEmail) {
             alert("이메일 중복체크를 해주세요!");
             document.member.memberEmail.focus();
         } else if (password.value == "") {
