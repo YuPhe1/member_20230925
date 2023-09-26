@@ -17,7 +17,7 @@
 </div>
 <div th:replace="~{component/footer :: footer}"></div>
 </body>
-<script>
+<script th:inline="javascript">
     document.member.addEventListener("submit", (e) => {
         e.preventDefault();
         const memberEmail = document.member.memberEmail.value;

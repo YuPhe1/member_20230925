@@ -22,9 +22,11 @@
 </div>
 <div th:replace="~{component/footer :: footer}"></div>
 </body>
-<script>
+<script th:inline="javascript">
     let checkEmail = false;
     const checkEmailArea = document.querySelector("#check-email-area");
+    // name으로 접근법
+    // const email = document.querySelector('[name="memberEmail"]').value;
     const check_false = () => {
         checkEmail = false;
         checkEmailArea.innerHTML = "";
@@ -36,19 +38,24 @@
             checkEmailArea.innerHTML = "이메일을 입력해 주세요.";
             checkEmailArea.style.color = "red";
         } else {
-            $.ajax({
-                type: "get",
+            axios({
+                method: "post", // http request method(get, post, put, delete ...)
                 url: "/member/dup-check",
-                data: {memberEmail: email},
-                success: function () {
-                    checkEmailArea.innerHTML = "사용가능한 이메일입니다.";
-                    checkEmailArea.style.color = "green";
-                    checkEmail = true;
-                }, error: function () {
-                    checkEmailArea.innerHTML = "이미사용중인 이메일 입니다.";
-                    checkEmailArea.style.color = "red";
+                data: {
+                    memberEmail: email
                 }
-            })
+            }).then(res => {
+                // 요청성공 후 서버에서 200응답
+                console.log(res);
+                checkEmailArea.innerHTML = "사용가능한 이메일입니다.";
+                checkEmailArea.style.color = "green";
+                checkEmail = true;
+            }).catch(err => {
+                // 요청실패 또는 서버에서 4xx, 5xx응답
+                console.log(err);
+                checkEmailArea.innerHTML = "이미사용중인 이메일 입니다.";
+                checkEmailArea.style.color = "red";
+            });
         }
     }
 

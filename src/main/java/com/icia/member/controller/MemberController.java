@@ -54,7 +54,7 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
         try {
-            MemberDTO dto = memberService.findByEmail(memberDTO.getMemberEmail());
+            MemberDTO dto = memberService.findByMemberEmail(memberDTO.getMemberEmail());
             if(dto.getMemberEmail().equals(memberDTO.getMemberEmail())
                     && dto.getMemberPassword().equals(memberDTO.getMemberPassword())){
                 session.setAttribute("loginEmail", dto.getMemberEmail());
@@ -79,14 +79,13 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/dup-check")
-    public ResponseEntity dupCheck(@RequestParam("memberEmail") String memberEmail) {
-        System.out.println("memberEmail = " + memberEmail);
-        try {
-            MemberDTO dto = memberService.findByEmail(memberEmail);
-            return new ResponseEntity(HttpStatus.CONFLICT);
-        } catch (NoSuchElementException e){
-            return new ResponseEntity(HttpStatus.OK);
+    @PostMapping("/dup-check")
+    public ResponseEntity dupCheck(@RequestBody MemberDTO memberDTO) {
+        boolean result = memberService.emailCheck(memberDTO.getMemberEmail());
+        if(result) {
+            return new ResponseEntity("사용가능", HttpStatus.OK);
+        }else {
+            return new ResponseEntity("사용불가능", HttpStatus.CONFLICT);
         }
     }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class MemberService {
         return MemberDTO.toMemberDTO(memberEntity);
     }
 
-    public MemberDTO findByEmail(String memberEmail) {
+    public MemberDTO findByMemberEmail(String memberEmail) {
         MemberEntity memberEntity = memberRepository.findByMemberEmail(memberEmail).orElseThrow(() -> new NoSuchElementException());
         return MemberDTO.toMemberDTO(memberEntity);
     }
@@ -53,5 +54,14 @@ public class MemberService {
     public void update(MemberDTO memberDTO) {
         MemberEntity memberEntity = MemberEntity.toEntity(memberDTO);
         memberRepository.save(memberEntity);
+    }
+
+    public boolean emailCheck(String memberEmail) {
+        Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
+        if(optionalMemberEntity.isEmpty()){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
