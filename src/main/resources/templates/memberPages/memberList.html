@@ -57,7 +57,16 @@
         });
     }
     const delete_fn = (id) => {
-        location.href = `/member/delete/${id}`;
+        // location.href = `/member/delete/${id}`;
+        axios({
+            method: "delete",
+            url: `/member/${id}`
+        }).then(res => {
+            alert("삭제 성공");
+            location.href = "/member";
+        }). catch(err => {
+            alert("삭제 실패")
+        })
     }
 </script>
 </html>
