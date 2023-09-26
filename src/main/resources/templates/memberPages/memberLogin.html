@@ -8,9 +8,10 @@
 <div th:replace="~{component/nav :: nav}"></div>
 <div class="container">
     <form name="member" action="/member/login" method="post">
+        <input type="hidden" name="redirectURI" th:value="${redirectURI}">
         <input type="text" name="memberEmail" placeholder="이메일"> <br>
         <input type="password" name="memberPassword" placeholder="비밀번호"> <br>
-        <div id="login-area"></div>
+        <div id="login-check-area"></div>
         <button>로그인</button>
         <button type="button" onclick="cancel_fn()">취소</button>
     </form>
@@ -22,20 +23,20 @@
         e.preventDefault();
         const memberEmail = document.member.memberEmail.value;
         const memberPassword = document.member.memberPassword.value;
-        $.ajax({
-            type: "post",
+        const redirectURI = document.member.redirectURI.value;
+        axios({
+            method: "post",
             url: "/member/login",
             data: {
                 memberEmail: memberEmail,
                 memberPassword: memberPassword
-            },
-            success: function () {
-                location.href = "/member/main";
-            }, error: function () {
-                const loginArea = document.querySelector("#login-area");
-                loginArea.innerHTML = "아이디또는 비밀번호가 틀렸습니다.";
-                loginArea.style.color = "red";
             }
+        }).then(res => {
+            location.href = redirectURI;
+        }).catch(err => {
+            const loginArea = document.querySelector("#login-check-area");
+            loginArea.innerHTML = "아이디또는 비밀번호가 틀렸습니다.";
+            loginArea.style.color = "red";
         })
     })
 

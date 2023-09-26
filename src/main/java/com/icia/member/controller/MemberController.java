@@ -47,18 +47,21 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginPage(){
+    public String loginPage(@RequestParam(value = "redirectURI", defaultValue = "/member/mypage") String redirectURI,
+                            Model model){
+        model.addAttribute("redirectURI", redirectURI);
         return "memberPages/memberLogin";
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
+    public ResponseEntity login(@RequestBody MemberDTO memberDTO, HttpSession session){
         try {
             MemberDTO dto = memberService.findByMemberEmail(memberDTO.getMemberEmail());
             if(dto.getMemberEmail().equals(memberDTO.getMemberEmail())
                     && dto.getMemberPassword().equals(memberDTO.getMemberPassword())){
                 session.setAttribute("loginEmail", dto.getMemberEmail());
                 session.setAttribute("loginId", dto.getId());
+                System.out.println("로그인성공");
                 return new ResponseEntity(HttpStatus.OK);
             } else {
                 return new ResponseEntity(HttpStatus.CONFLICT);
@@ -68,6 +71,10 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/mypage")
+    public String myPage() {
+        return "memberPages/memberMain";
+    }
     @GetMapping("/main")
     public String member(){
         return "memberPages/memberMain";
