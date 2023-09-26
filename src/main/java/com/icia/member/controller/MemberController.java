@@ -128,4 +128,12 @@ public class MemberController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity update(@PathVariable("id") Long id,
+                                 @RequestBody MemberDTO memberDTO, HttpSession session){
+        memberService.update(memberDTO);
+        session.invalidate();
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

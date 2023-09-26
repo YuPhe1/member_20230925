@@ -43,8 +43,32 @@
         e.preventDefault();
         const passDB = [[${member.memberPassword}]];
         const pass = document.querySelector('[name="memberPassword"]').value;
+
+        const id = document.querySelector('[name="id"]').value;
+        const name = document.querySelector('[name="memberName"]').value;
+        const birth = document.querySelector('[name="memberBirth"]').value;
+        const email = document.querySelector('[name="memberEmail"]').value;
+        const mobile = document.querySelector('[name="memberMobile"]').value;
+
         if(passDB == pass){
-            document.member.submit();
+            // document.member.submit();
+            axios({
+                method:"put",
+                url:`/member/${id}`,
+                date:{
+                    id:id,
+                    memberEmail: email,
+                    memberPassword: pass,
+                    memberName: name,
+                    memberBirth: birth,
+                    memberMobile:mobile
+                }
+            }).then(res => {
+                alert("정보수정이 완료되었습니다. 로그인화면으로 이동합니다.");
+                location.href = "/member/login";
+            }).catch(err => {
+                alert("정보수정에 실패하였습니다.")
+            });
         } else {
             alert("비밀번호가 틀립니다.");
         }
