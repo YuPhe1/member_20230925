@@ -13,7 +13,10 @@
             <span class="input-group-text">이메일</span>
             <input type="text" class="form-control" name="memberEmail" th:value="${member.memberEmail}">
         </div>
-        <input type="hidden" th:value="${member.memberPassword}" name="memberPassword">
+        <div class="input-group mb-3">
+            <span class="input-group-text">비밀번호</span>
+            <input type="password" class="form-control" name="memberPassword">
+        </div>
         <div class="input-group mb-3">
             <span class="input-group-text">이름</span>
             <input type="text" class="form-control" name="memberName" th:value="${member.memberName}">
@@ -35,6 +38,18 @@
 <div th:replace="~{component/footer :: footer}"></div>
 </body>
 <script th:inline="javascript">
+
+    document.member.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const passDB = [[${member.memberPassword}]];
+        const pass = document.querySelector('[name="memberPassword"]').value;
+        if(passDB == pass){
+            document.member.submit();
+        } else {
+            alert("비밀번호가 틀립니다.");
+        }
+    })
+
     const cancel_fn = (id) => {
         location.href = `/member/${id}`;
     }

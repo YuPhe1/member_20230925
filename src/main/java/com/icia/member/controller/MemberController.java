@@ -112,9 +112,11 @@ public class MemberController {
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute MemberDTO memberDTO){
+    public String update(@ModelAttribute MemberDTO memberDTO, HttpSession session){
+        // 업데이트 처리가 끝나면 로그아웃 처리를 하고 로그인 페이지로
         memberService.update(memberDTO);
-        return "redirect:/member/"+memberDTO.getId();
+        session.invalidate();
+        return "redirect:/member/login";
     }
 
     @GetMapping("/axios/{id}")
