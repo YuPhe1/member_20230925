@@ -116,4 +116,14 @@ public class MemberController {
         memberService.update(memberDTO);
         return "redirect:/member/"+memberDTO.getId();
     }
+
+    @GetMapping("/axios/{id}")
+    public ResponseEntity axiosDetail(@PathVariable("id") Long id){
+        try {
+            MemberDTO memberDTO = memberService.findById(id);
+            return new ResponseEntity(memberDTO, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

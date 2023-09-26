@@ -33,21 +33,31 @@
             </td>
         </tr>
     </table>
+    <div id="detail-area"></div>
 </div>
 <div th:replace="~{component/footer :: footer}"></div>
 </body>
 <script th:inline="javascript">
     const detail_fn = (id) => {
-        location.href = `/member/${id}`;
+        const detailArea = document.querySelector("#detail-area");
+        axios({
+            method:"get",
+            url:`/member/axios/${id}`,
+        }).then(res => {
+            let result = "<div class='card p-3'>";
+            result += `<p>id: ${res.data.id}</p>`;
+            result += `<p>이메일: ${res.data.memberEmail}</p>`;
+            result += `<p>이름: ${res.data.memberName}</p>`;
+            result += `<p>전화번호: ${res.data.memberMobile}</p>`;
+            result += `<p>생년월일: ${res.data.memberBirth}</p>`;
+            result += "</div>";
+            detailArea.innerHTML = result;
+        }).catch(err => {
+            console.log("err", err);
+        });
     }
     const delete_fn = (id) => {
         location.href = `/member/delete/${id}`;
-        // axios.delete("/member/" + id)
-        //     .then(function (response) {
-        //         location.href = "/member";
-        //     }).catch(function (error) {
-        //     console.log(error)
-        // })
     }
 </script>
 </html>
