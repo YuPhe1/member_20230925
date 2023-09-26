@@ -45,4 +45,13 @@ public class MemberService {
                 .orElseThrow(() -> new NoSuchElementException());
         return true;
     }
+
+    public void delete(Long id) {
+        memberRepository.deleteById(id);
+    }
+
+    public void update(MemberDTO memberDTO) {
+        MemberEntity memberEntity = MemberEntity.toEntity(memberDTO);
+        memberRepository.save(memberEntity);
+    }
 }

@@ -13,29 +13,30 @@ import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
 @Controller
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
 
-    @GetMapping("/member/save")
+    @GetMapping("/save")
     public String savePage(){
         return "memberPages/memberSave";
     }
 
-    @PostMapping("/member/save")
+    @PostMapping("/save")
     public String save(@ModelAttribute MemberDTO memberDTO){
         memberService.save(memberDTO);
         return "redirect:/member/login";
     }
 
-    @GetMapping("/members")
+    @GetMapping()
     public String findAll(Model model){
         model.addAttribute("memberList", memberService.findAll());
         return "memberPages/memberList";
     }
 
-    @GetMapping("/member/{id}")
+    @GetMapping("/{id}")
     public String detail(@PathVariable("id") Long id, Model model){
         try {
             model.addAttribute("member", memberService.findById(id));
@@ -45,12 +46,12 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/member/login")
+    @GetMapping("/login")
     public String loginPage(){
         return "memberPages/memberLogin";
     }
 
-    @PostMapping("/member/login")
+    @PostMapping("/login")
     public ResponseEntity login(@ModelAttribute MemberDTO memberDTO, HttpSession session){
         try {
             MemberDTO dto = memberService.findByEmail(memberDTO.getMemberEmail());
@@ -67,18 +68,18 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/member")
+    @GetMapping("/main")
     public String member(){
         return "memberPages/memberMain";
     }
 
-    @GetMapping("/member/logout")
+    @GetMapping("/logout")
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/";
     }
 
-    @GetMapping("/member/dup-check")
+    @GetMapping("/dup-check")
     public ResponseEntity dupCheck(@RequestParam("memberEmail") String memberEmail) {
         System.out.println("memberEmail = " + memberEmail);
         try {
@@ -87,5 +88,33 @@ public class MemberController {
         } catch (NoSuchElementException e){
             return new ResponseEntity(HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id){
+        memberService.delete(id);
+        return "redirect:/member";
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity axios_delete(@PathVariable("id") Long id){
+        memberService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/update/{id}")
+    public String updatePage(@PathVariable("id") Long id, Model model){
+        try {
+            MemberDTO memberDTO = memberService.findById(id);
+            model.addAttribute("member", memberDTO);
+            return "memberPages/memberUpdate";
+        } catch (NoSuchElementException e){
+            return "memberPages/memberNotFound";
+        }
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberDTO){
+        memberService.update(memberDTO);
+        return "redirect:/member/"+memberDTO.getId();
     }
 }

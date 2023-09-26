@@ -14,6 +14,7 @@
             <th>이름</th>
             <th>생년월일</th>
             <th>전화번호</th>
+            <th>수정</th>
         </tr>
         <tr>
             <td th:text="${member.id}"></td>
@@ -21,9 +22,19 @@
             <td th:text="${member.memberName}"></td>
             <td th:text="${member.memberBirth}"></td>
             <td th:text="${member.memberMobile}"></td>
+            <td>
+                <button class="btn btn-secondary" th:onclick="update_fn([[${member.id}]])">
+                    수정
+                </button>
+            </td>
         </tr>
     </table>
 </div>
 <div th:replace="~{component/footer :: footer}"></div>
 </body>
+<script>
+    const update_fn = (id) => {
+        location.href = `/member/update/${id}`
+    }
+</script>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:replace="~{component/config :: config}"></th:block>
+</head>
+<body>
+<div th:replace="~{component/header :: header}"></div>
+<div th:replace="~{component/nav :: nav}"></div>
+<div class="container">
+    <form name="member" action="/member/update" method="post">
+        <input type="hidden" th:value="${member.id}" name="id">
+        <div class="input-group mb-3">
+            <span class="input-group-text">이메일</span>
+            <input type="text" class="form-control" name="memberEmail" th:value="${member.memberEmail}">
+        </div>
+        <input type="hidden" th:value="${member.memberPassword}" name="memberPassword">
+        <div class="input-group mb-3">
+            <span class="input-group-text">이름</span>
+            <input type="text" class="form-control" name="memberName" th:value="${member.memberName}">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">생년월일</span>
+            <input type="date" class="form-control" name="memberBirth" th:value="${member.memberBirth}">
+        </div>
+        <div class="input-group mb-3">
+            <span class="input-group-text">전화번호</span>
+            <input type="text" class="form-control" name="memberMobile" th:value="${member.memberMobile}">
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary">수정</button>
+            <button type="button" class="btn btn-secondary" th:onclick="cancel_fn([[${member.id}]])">취소</button>
+        </div>
+    </form>
+</div>
+<div th:replace="~{component/footer :: footer}"></div>
+</body>
+<script>
+    const cancel_fn = (id) => {
+        location.href = `/member/${id}`;
+    }
+</script>
+</html>

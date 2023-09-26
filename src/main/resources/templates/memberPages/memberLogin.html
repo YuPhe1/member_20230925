@@ -30,7 +30,7 @@
                 memberPassword: memberPassword
             },
             success: function () {
-                location.href = "/member";
+                location.href = "/member/main";
             }, error: function () {
                 const loginArea = document.querySelector("#login-area");
                 loginArea.innerHTML = "아이디또는 비밀번호가 틀렸습니다.";
