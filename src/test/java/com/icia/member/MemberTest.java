@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
 
 @SpringBootTest
@@ -109,8 +110,13 @@ public class MemberTest {
     @Rollback
     @DisplayName("회원 삭제 테스트")
     public void deleteTest(){
+        // 1.
         MemberDTO memberDTO = newMember(9999);
+        // 2.
         Long saveId = memberService.save(memberDTO);
+        // 3.
         memberService.delete(saveId);
+        // 4.
+        assertThatThrownBy(() -> memberService.findById(saveId)).isInstanceOf(NoSuchElementException.class);
     }
 }
