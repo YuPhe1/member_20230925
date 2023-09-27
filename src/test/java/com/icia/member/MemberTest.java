@@ -3,7 +3,8 @@ package com.icia.member;
 import com.icia.member.dto.MemberDTO;
 import com.icia.member.repository.MemberRepository;
 import com.icia.member.service.MemberService;
-import org.assertj.core.api.Assertions;
+// Assertions에 속한 모든 static 메서드를 사용할 메서드 이름만 작성하여 사용 가능하도록
+import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +72,7 @@ public class MemberTest {
         // 3.
         MemberDTO findMember = memberService.findById(saveId);
         // 4.
-        Assertions.assertThat(newMemberDTO.getMemberEmail()).isEqualTo(findMember.getMemberEmail());
+        assertThat(newMemberDTO.getMemberEmail()).isEqualTo(findMember.getMemberEmail());
     }
 
     /**
@@ -93,7 +94,7 @@ public class MemberTest {
         loginMemberDTO.setMemberPassword(memberDTO.getMemberPassword());
         boolean loginResult = memberService.login(loginMemberDTO);
         // 3.
-        Assertions.assertThat(true).isEqualTo(loginResult);
+        assertThat(true).isEqualTo(loginResult);
     }
 
     /**
